@@ -54,3 +54,16 @@ export async function POST(req: NextRequest) {
         );
     }
 }
+
+export async function GET() {
+    try {
+        await connectDB();
+        const event = await Event.find().sort({ createdAt: -1 });
+        return NextResponse.json(
+            { message: 'Events fetched successfully', event },
+            { status: 200 }
+        );
+    } catch (e) {
+        return NextResponse.json({ message: 'Error fetching events', error: e }, { status: 500 });
+    }
+}
