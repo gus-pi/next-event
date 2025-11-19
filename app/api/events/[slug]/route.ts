@@ -1,4 +1,4 @@
-import { Event, IEvent } from '@/app/database';
+import { Event, IEvent } from '@/database';
 import connectDB from '@/lib/mongodb';
 import { NextRequest, NextResponse } from 'next/server';
 
