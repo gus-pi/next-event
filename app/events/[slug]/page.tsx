@@ -1,4 +1,7 @@
 import BookEvent from '@/app/components/BookEvent';
+import EventCard from '@/app/components/EventCard';
+import { IEvent } from '@/database';
+import { getSimilarEventsBySlug } from '@/lib/actions/event.actions';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
 
@@ -61,6 +64,8 @@ const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }> 
 
     const bookings = 10;
 
+    const similarEvents: IEvent[] = await getSimilarEventsBySlug(slug);
+
     return (
         <section id="event">
             <h1>Event Description</h1>
@@ -94,14 +99,14 @@ const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }> 
                         />
                     </section>
 
-                    <EventAgenda agendaItems={JSON.parse(agenda[0])} />
+                    <EventAgenda agendaItems={agenda} />
 
                     <section className="flex-col-gap-2">
                         <h2>About the Organizer</h2>
                         <p>{organizer}</p>
                     </section>
 
-                    <EventTags tags={JSON.parse(tags[0])} />
+                    <EventTags tags={tags} />
                 </div>
                 {/* Right Side Booking Form */}
                 <aside className="booking">
@@ -117,6 +122,16 @@ const EventDetailsPage = async ({ params }: { params: Promise<{ slug: string }> 
                         <BookEvent />
                     </div>
                 </aside>
+            </div>
+
+            <div className="flex- w-full flex-col gap-4 pt-20">
+                <h2>Similar Events</h2>
+                <div className="events">
+                    {similarEvents.length > 0 &&
+                        similarEvents.map((event: IEvent) => (
+                            <EventCard key={event.title} {...event} />
+                        ))}
+                </div>
             </div>
         </section>
     );
